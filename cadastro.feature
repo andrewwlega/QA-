@@ -1,77 +1,78 @@
-# language: pt
+Funcionalidade: Configurar Produto
+  Para garantir a configuração correta dos produtos,
+  Como um administrador da loja,
+  Eu quero configurar produtos no sistema.
 
-Funcionalidade: Cadastro
-  Como cliente da EBAC-SHOP
-  Quero concluir meu cadastro
-  Para finalizar minha compra
+  Contexto:
+    Dado que estou logado como administrador
 
-  Critérios de Aceitação:
-  1. Deve ser cadastrado com todos os dados obrigatórios, marcados com asteriscos.
-  2. Não deve permitir campo e-mail com formato inválido. O sistema deve exibir uma mensagem de erro.
-  3. Ao tentar cadastrar com campos vazios, deve exibir mensagem de alerta.
+  Cenário: Seleções de cor, tamanho e quantidade devem ser obrigatórios
+    Quando eu tento cadastrar um produto sem selecionar cor, tamanho e quantidade
+    Então eu vejo a mensagem "Cor, tamanho e quantidade são obrigatórios"
 
-  Cenário: Cadastro com dados válidos
-    Dado que estou na página de cadastro
-    Quando preencher todos os dados obrigatórios
-      | campo            | valor                        |
-      | nome             | João                         |
-      | sobrenome        | Silva                        |
-      | e-mail           | joao.silva@example.com       |
-      | senha            | Senha123!                    |
-      | confirmaçãoSenha | Senha123!                    |
-    E submeter o formulário
-    Então o cadastro deve ser concluído com sucesso
+  Cenário: Deve permitir apenas 10 produtos por venda
+    Dado que eu selecionei 11 produtos para a venda
+    Quando eu tento finalizar a compra
+    Então eu vejo a mensagem "É permitido apenas 10 produtos por venda"
 
-  Cenário: Cadastro com e-mail inválido
-    Dado que estou na página de cadastro
-    Quando preencher os seguintes dados:
-      | campo            | valor                        |
-      | nome             | João                         |
-      | sobrenome        | Silva                        |
-      | e-mail           | emailinvalido                |
-      | senha            | Senha123!                    |
-      | confirmaçãoSenha | Senha123!                    |
-    E submeter o formulário
-    Então o sistema deve exibir a mensagem "Formato de e-mail inválido"
+  Cenário: Quando eu clicar no botão "limpar" deve voltar ao estado original
+    Dado que eu preenchi os campos do produto
+    Quando eu clico no botão "limpar"
+    Então os campos do produto devem voltar ao estado original
 
-  Cenário: Cadastro com campos obrigatórios não preenchidos
-    Dado que estou na página de cadastro
-    Quando tentar me cadastrar sem preencher os seguintes campos obrigatórios:
-      | campo            |
-      | nome             |
-      | sobrenome        |
-      | e-mail           |
-    E submeter o formulário
-    Então o sistema deve exibir a mensagem de alerta "Preencha todos os campos obrigatórios"
+Funcionalidade: Login na Plataforma
+  Para acessar a plataforma,
+  Como um usuário,
+  Eu quero fazer login no sistema.
 
-Funcionalidade: Cálculo do Índice de Massa Corporal (IMC)
-  Como um usuário do aplicativo de saúde
-  Eu quero ser capaz de calcular meu IMC
-  Para que eu possa entender se estou com um peso saudável
+  Contexto:
+    Dado que eu estou na tela de login
 
-  Critérios de Aceitação:
-  1. O aplicativo deve calcular o IMC corretamente com base no peso e na altura fornecidos.
-  2. O IMC deve ser exibido com duas casas decimais.
+  Esquema do Cenário: Ao inserir dados válidos deve ser direcionado para a tela de checkout
+    Quando eu inserir <usuário> e <senha>
+    Então eu devo ser direcionado para a tela de checkout
 
-  Cenário: Calcular o IMC com dados válidos
-    Dado que estou na calculadora de IMC
-    Quando inserir o peso e a altura:
-      | peso | altura |
-      | 60   | 1.70   |
-    E calcular o IMC
-    Então o aplicativo deve exibir o IMC como 20.76
+    Exemplos:
+      | usuário   | senha   |
+      | "usuario1" | "senha1" |
+      | "usuario2" | "senha2" |
 
-  Cenário: Calcular o IMC com valores inválidos
-    Dado que estou na calculadora de IMC
-    Quando inserir o peso e a altura:
-      | peso | altura |
-      | -70  | 1.75   |
-    E calcular o IMC
-    Então o aplicativo deve exibir a mensagem de erro "Peso ou altura inválidos"
+  Esquema do Cenário: Ao inserir um dos campos inválidos deve exibir uma mensagem de alerta "Usuário ou senha inválidos"
+    Quando eu inserir <usuário> e <senha>
+    Então eu devo ver a mensagem "Usuário ou senha inválidos"
 
-  Cenário: Calcular o IMC sem preencher todos os campos
-    Dado que estou na calculadora de IMC
-    Quando tentar calcular o IMC sem preencher peso ou altura
-    E clicar em calcular
-    Então o aplicativo deve exibir a mensagem de alerta "Preencha todos os campos obrigatórios"
+    Exemplos:
+      | usuário   | senha   |
+      | "usuario1" | "senha" |
+      | "usuario"  | "senha1" |
 
+Funcionalidade: Tela de Cadastro - Checkout
+  Para finalizar a compra,
+  Como um usuário,
+  Eu quero me cadastrar no sistema.
+
+  Contexto:
+    Dado que eu estou na tela de cadastro
+
+  Esquema do Cenário: Cadastro com dados válidos
+    Quando eu inserir <nome>, <sobrenome>, <email> e <senha>
+    Então deve exibir uma mensagem de sucesso
+
+    Exemplos:
+      | nome    | sobrenome | email               | senha     |
+      | "Andrei" | "Silva"   | "andrei@gmail.com"  | "senha@123" |
+      | "Fábio"  | "Araujo"  | "fabio@gmail.com"   | "senha@123" |
+
+  Esquema do Cenário: Não deve permitir campo e-mail com formato inválido. Sistema deve inserir uma mensagem de erro
+    Quando eu inserir <email>
+    Então eu devo ver a mensagem "Formato de e-mail inválido"
+
+    Exemplos:
+      | email            |
+      | "emailinvalido"  |
+      | "outroinvalido@" |
+      | "invalido@.com"  |
+
+  Cenário: Ao tentar cadastrar com campos vazios, deve exibir mensagem de alerta
+    Quando eu tento cadastrar com campos vazios
+    Então eu vejo a mensagem "Todos os campos são obrigatórios"
