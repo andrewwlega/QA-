@@ -61,7 +61,7 @@ Funcionalidade: Tela de Cadastro - Checkout
     Exemplos:
       | nome    | sobrenome | email               | senha     |
       | "Andrei" | "Silva"   | "andrei@gmail.com"  | "senha@123" |
-      | "Enzo"  | "Mendes"  | "enzo@gmail.com"   | "senha@123" |
+      | "Enzo"  | "Mendes"  | "enzo@gmail.com"   | "senha@125" |
 
   Esquema do Cenário: Não deve permitir campo e-mail com formato inválido. Sistema deve inserir uma mensagem de erro
     Quando eu inserir <email>
