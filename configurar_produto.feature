@@ -1,20 +1,22 @@
 # language: pt
-Funcionalidade: Configurar produto
-  Como cliente da EBAC-SHOP
-  Quero configurar meu produto de acordo com meu tamanho e gosto
-  Para depois inserir no carrinho
+Funcionalidade: Configurar Produto
+  Para garantir a configuração correta dos produtos,
+  Como um administrador da loja,
+  Eu quero configurar produtos no sistema.
 
-  Cenário: Selecionar cor, tamanho e quantidade
-    Dado que estou na página de configuração do produto
-    Quando selecionar as opções de cor, tamanho e quantidade
-    Então o produto deve ser configurado com as opções escolhidas
+  Contexto:
+    Dado que estou logado como administrador
 
-  Cenário: Limite de produtos por venda
-    Dado que estou na página de configuração do produto
-    Quando tentar selecionar mais de 10 produtos
-    Então o sistema deve exibir uma mensagem de alerta "Você pode selecionar no máximo 10 produtos por venda"
+  Cenário: Seleções de cor, tamanho e quantidade devem ser obrigatórios
+    Quando eu tento cadastrar um produto sem selecionar cor, tamanho e quantidade
+    Então eu vejo a mensagem "Cor, tamanho e quantidade são obrigatórios"
 
-  Cenário: Limpar configurações
-    Dado que estou na página de configuração do produto com opções de cor, tamanho e quantidade selecionadas
-    Quando clicar no botão "limpar"
-    Então as seleções devem voltar ao estado original
+  Cenário: Deve permitir apenas 10 produtos por venda
+    Dado que eu selecionei 11 produtos para a venda
+    Quando eu tento finalizar a compra
+    Então eu vejo a mensagem "É permitido apenas 10 produtos por venda"
+
+  Cenário: Quando eu clicar no botão "limpar" deve voltar ao estado original
+    Dado que eu preenchi os campos do produto
+    Quando eu clico no botão "limpar"
+    Então os campos do produto devem voltar ao estado original
